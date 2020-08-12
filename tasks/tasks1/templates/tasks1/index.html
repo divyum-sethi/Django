@@ -7,7 +7,7 @@
     <style>
 	h1 {
 		padding-left:40px;}
-	
+
 	a{
 		padding-left:40px;
     </style>
@@ -16,15 +16,26 @@
     <h1>Tasks</h1>
     <ul>
         {% for task in tasks %}
+        {% if task.1 > 8 %}
+         <li class="list-group-item list-group-item-danger">
+          {{task.0}}
+
+          <strong style="float:right; margin-right:50px "> {{"Urgent!"}}</strong>
+
+         </li>
+
+        {% else %}
         <li class="list-group-item list-group-item-info">
-           {{task}}
+           {{ task.0 }}
+
         </li>
+        {% endif %}
 	{% empty %}
             <li>No tasks.</li>
         {% endfor %}
     </ul>
-    
+
        <a href="{% url 'tasks1:add' %}">Add a new task</a>
-    
+
 </body>
 </html>
