@@ -11,8 +11,11 @@ class NewTaskForm(forms.Form):
 def index(request):
     if "tasks" not in request.session:
         request.session["tasks"]=[]
+    tasks=request.session["tasks"]
+    tasks.sort(key = lambda x: x[1],reverse=True)
+    #task_list=[x[0] for x in tasks]
     return render(request, "tasks1/index.html",{
-        "tasks":request.session["tasks"]
+        "tasks":tasks
     })
 
 def add(request):
@@ -20,7 +23,9 @@ def add(request):
         form = NewTaskForm(request.POST)
         if form.is_valid():
             new_task=form.cleaned_data["task"]
-            request.session["tasks"] += [new_task]
+            new_priority=form.cleaned_data["priority"]
+            new_tuple=(new_task,new_priority)
+            request.session["tasks"] += [new_tuple]
 	#redirect to tasks page
             return HttpResponseRedirect(reverse("tasks1:index"))
         else:
@@ -30,6 +35,5 @@ def add(request):
             })
 	#return empty form request method is not post
     return render(request, "tasks1/add.html", {
-        "form": NewTaskForm()   
+        "form": NewTaskForm()
     })
-
